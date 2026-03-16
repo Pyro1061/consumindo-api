@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel da Turma</title>
+    <style>
+        body {  font-family: Arial, Helvetica, sans-serif; padding: 30px;}
+        .cartao {border: 1px solid #ccc; padding: 20px; border-radius: 8px; max-width: 500px; margin-bottom: 20px;}
+        input {display: block; margin-bottom: 10px; padding: 8px; width: 90%;}
+        button {padding: 10px 15px; cursor: pointer; margin-bottom: 5px; border-left: 4px solid #0078D7;}
+    </style>
+</head>
+<body>
+    <div class="cartao">
+        <h3>Cadastrar Novo Aluno (POST)</h2>
+        <input type="text" id="inputNome" placeholder="Nome do Aluno">
+        <input type="number" id="inputIdade" placeholder="Idade">
+        <button onclick="salvarAluno()"> Salvar na Lista C#</button>
+        <p id="mensagemSistema" style="color: blue; font-weight: bold;"></p>
+    </div>
+
+    <div class="cartao">
+        <h3>Lista da Turma (GET)</h3>
+        <button onclick="carregarTurma()">Atualizar Lista</button>
+        <div id="listaAlunos">
+            <p style="color: gray;">Clique em atualizar para buscar os dados...</p>
+        </div>
+    </div>
+
+    <script>
+        const apiURL = 'http://localhost:5062/aluno'
+
+        function carregarTurma() {
+            const divResultados = document.getElementById('listaAlunos');
+            divResultados.innerHTML = "<p style='color:orange;'>Buscando dados...</p>";
+
+            fetch(apiURL).then(resposta => {
+                if (!resposta.ok) throw new Error("A API retornou um erro.");
+                return resposta.json();
+            })
+            .then(ArrayDeAlunos => {
+                divResultados.innerHTML = "";
+                ArrayDeAlunos.forEach(aluno => {
+                    divResultados.innerHTML += `<div class="aluno-item">
+                        <strong>${aluno.nome}</strong> (Idade: ${aluno.idade}) - Matrícula ${aluno.matricula}
+                        </div>`;
+                });
+            })
+            .catch(erro => {
+                divResultados.innerHTML = `<p style="color: red; font-weight: bold;">Erro de conexão! A API C# está rodando?</p>`;
+                console.error("Detalhe do erro:", erro);
+            });
+        }
+
+        function salvarAluno() {
+            const msg = document.getElementById('mensagemSistema');
+            msg.innerText = "Enviando...";
+            msg.style.color = "orange";
+
+            const objetoAluno = {
+                nome: document.getElementById('inputNome').value,
+                idade: parseInt(document.getElementById('inputIdade').value)
+            };
+            fetch(apiURL, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(objetoAluno)
+            })
+            .then(async resposta => {
+                if (!resposta.ok) {
+                    msg.innerText = await resposta.text();
+                    msg.style.color = "red";
+                } else {
+                    msg.innerText = "Aluno adicionado na turma!";
+                    msg.style.color = "green";
+                    document.getElementById('inputNome').value = "";
+                    document.getElementById('inputIdade').value = ""; 
+
+                    carregarTurma(); // Atualiza a lista automaticamente na tela
+                }
+            })
+            .catch(erro => {
+                msg.innerText = "Erro ao enviar! A API C# está rodando?";
+                msg.style.color = "red";
+                console.error("Detalhe do erro:", erro);
+            });
+        }
+    </script>
+    
+</body>
+</html>
