@@ -15,8 +15,6 @@ Os dados ficam armazenados **temporariamente em memória**, ou seja, **não exis
 
 # ⚙️ Como a API funciona
 
-A API possui algumas **rotas (endpoints)** que podem ser acessadas para interagir com os dados.
-
 ### 1️⃣ Listar alunos
 
 A rota abaixo retorna todos os alunos cadastrados.
@@ -37,10 +35,7 @@ A rota abaixo permite cadastrar um novo aluno.
 POST /aluno
 ```
 
-Para adicionar um aluno é necessário enviar:
-
-* nome
-* idade
+Para adicionar um aluno é necessário enviar o nome e a idade do aluno.
 
 A API verifica se os dados são válidos e então **gera automaticamente uma matrícula** para o aluno.
 
@@ -48,10 +43,7 @@ A API verifica se os dados são válidos e então **gera automaticamente uma mat
 
 # 🧠 Armazenamento de dados
 
-Os alunos são guardados em uma **lista dentro da própria aplicação**.
-
-Isso significa que:
-
+Os alunos são guardados em uma **lista dentro da própria aplicação**, ou seja:
 * os dados existem **apenas enquanto a API estiver rodando**
 * ao reiniciar a aplicação, **os dados são apagados**
 
@@ -59,17 +51,6 @@ Esse tipo de armazenamento é usado apenas para **testes e aprendizado**.
 
 ---
 
-# 🌐 Integração com site
+# 🌐 Conecção com um site
 
-O projeto também possui uma pasta chamada **MeuSite**, que contém um site simples que pode **consumir a API** para mostrar ou cadastrar alunos.
-
----
-
-# 🎯 Objetivo do projeto
-
-Este projeto foi criado para **demonstrar conceitos básicos de APIs**, como:
-
-* criação de rotas
-* envio e recebimento de dados
-* validação simples
-* comunicação entre site e API
+Dentro da pasta chamada **MeuSite**, contém um site simples que pode **consumir a API** para mostrar ou cadastrar alunos, tenha certeza que a API esteja rodando para testar o site.
